@@ -14,16 +14,10 @@ namespace WeatherProject.Models
     {
         [Key]
         public int EventID { get; set; }
-        [Display(Name = "Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime EventDate { get; set; }
-        [Display(Name = "Time")]
         public string TimeOfEvent { get; set; }
-        [Display(Name = "City")]
         public string City { get; set; }
-        [Display(Name = "Summary")]
         public string Summary { get; set; }
-        [Display(Name = "Link")]
         public string URL { get; set; }
         public string WeatherDescription { get; set; }
         public bool IsRemote { get; set; }
@@ -136,7 +130,6 @@ namespace WeatherProject.Models
         {
             List<EventInfo> techEvents = GetEventsWithoutWeather();
             AddWeather(techEvents);
-            techEvents.OrderBy(a => a.City).ThenBy(a => a.EventDate);
             return techEvents;
         }
 
@@ -178,7 +171,8 @@ namespace WeatherProject.Models
                     }
                     else
                     {
-                        techEvent.WeatherDescription = snapshot.weather[0].description;
+                        string weatherCapitalised = char.ToUpper(snapshot.weather[0].description[0]) + snapshot.weather[0].description.Substring(1);
+                        techEvent.WeatherDescription = weatherCapitalised;
                         break;
                     }
                 }
@@ -195,8 +189,8 @@ namespace WeatherProject.Models
             string url = "https://opentechcalendar.co.uk/api1/events.json";
             string json = new System.Net.WebClient().DownloadString(url);
             var dataPoints = JsonConvert.DeserializeObject<Root>(json);
+            dataPoints.data.OrderBy(a => a.areas[0].title);
             List<EventInfo> eventsWithoutWeather = new List<EventInfo>();
-            int eventNum = 0;
             foreach (var entry in dataPoints.data)
             {
                 if (entry.cancelled || entry.country.title != "United Kingdom")
@@ -210,7 +204,6 @@ namespace WeatherProject.Models
                 {
                     continue;
                 }
-                obj.EventID = eventNum++;
                 obj.Summary = entry.summary;
                 var theDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
                 obj.URL = "https://opentechcalendar.co.uk/event/" + entry.slugforurl;
@@ -235,8 +228,18 @@ namespace WeatherProject.Models
                 }
                 eventsWithoutWeather.Add(obj);
             }
-
+            AssignIDs(eventsWithoutWeather);
             return eventsWithoutWeather;
+        }
+
+        private static void AssignIDs(List<EventInfo> eventsWithoutWeather)
+        {
+            int eventNum = 0;
+            eventsWithoutWeather.OrderBy(a => a.City);
+            foreach(var entry in eventsWithoutWeather)
+            {
+                entry.EventID = eventNum++;
+            }
         }
     }
 

@@ -16,10 +16,10 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.EventDate)
+                Event Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TimeOfEvent)
+                Event time
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.City)
@@ -28,10 +28,10 @@
                 @Html.DisplayNameFor(model => model.Summary)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.URL)
+                Click for more info
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WeatherDescription)
+                Weather description
             </th>
             <th>
                 Virtual event?
@@ -69,8 +69,10 @@
         }
 
     </table>
-
+    <script type ="text/javascript">
+        document.getElementsByClassName("container").style.color = "blue";
+    </script>
     <footer>
-        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <p><em>Employs <a href="https://opentechcalendar.co.uk/">Open Tech Calender </a> for event info and <a href= "https://openweathermap.org/api"> Open WeatherMap API </a>for weather info.</em></p>
     </footer>
 </body>

@@ -30,6 +30,7 @@ C:\Users\User\source\repos\WeatherProject\bin\roslyn\VBCSCompiler.exe.config
 C:\Users\User\source\repos\WeatherProject\bin\Antlr3.Runtime.dll
 C:\Users\User\source\repos\WeatherProject\bin\EntityFramework.dll
 C:\Users\User\source\repos\WeatherProject\bin\EntityFramework.SqlServer.dll
+C:\Users\User\source\repos\WeatherProject\bin\HtmlAgilityPack.dll
 C:\Users\User\source\repos\WeatherProject\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\User\source\repos\WeatherProject\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\User\source\repos\WeatherProject\bin\Newtonsoft.Json.dll
@@ -43,6 +44,8 @@ C:\Users\User\source\repos\WeatherProject\bin\System.Web.WebPages.Razor.dll
 C:\Users\User\source\repos\WeatherProject\bin\WebGrease.dll
 C:\Users\User\source\repos\WeatherProject\bin\EntityFramework.xml
 C:\Users\User\source\repos\WeatherProject\bin\EntityFramework.SqlServer.xml
+C:\Users\User\source\repos\WeatherProject\bin\HtmlAgilityPack.pdb
+C:\Users\User\source\repos\WeatherProject\bin\HtmlAgilityPack.xml
 C:\Users\User\source\repos\WeatherProject\bin\System.Web.Helpers.xml
 C:\Users\User\source\repos\WeatherProject\bin\System.Web.Mvc.xml
 C:\Users\User\source\repos\WeatherProject\bin\System.Web.Optimization.xml
@@ -53,13 +56,10 @@ C:\Users\User\source\repos\WeatherProject\bin\System.Web.WebPages.Razor.xml
 C:\Users\User\source\repos\WeatherProject\bin\Newtonsoft.Json.xml
 C:\Users\User\source\repos\WeatherProject\bin\Antlr3.Runtime.pdb
 C:\Users\User\source\repos\WeatherProject\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.Migrations.newfield.resources
+C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.Migrations.Changestotheinstancevariables.resources
+C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.csproj.GenerateResource.cache
 C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.dll
 C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.pdb
-C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.Migrations.newfield.resources
-C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.csproj.GenerateResource.cache
-C:\Users\User\source\repos\WeatherProject\bin\HtmlAgilityPack.dll
-C:\Users\User\source\repos\WeatherProject\bin\HtmlAgilityPack.pdb
-C:\Users\User\source\repos\WeatherProject\bin\HtmlAgilityPack.xml
-C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.Migrations.Changestotheinstancevariables.resources
-C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.csproj.AssemblyReference.cache

@@ -17,132 +17,30 @@ namespace WeatherProject.Controllers
         // GET: EventInfoes
         public ActionResult Index()
         {
-            DeleteRecords();
+            DeleteRecords(); // Deletes all records in the database
             List<EventInfo> techEvents = CreateObjects.GetTechEvents();
-            AddRecords(techEvents);
+            AddRecords(techEvents); // Populates the database with the newly created objects.
+            db.EventInfo.OrderBy(a => a.City);
             return View(db.EventInfo.ToList());
         }
 
-        public void AddRecords(List<EventInfo> techEvents)
+        private void AddRecords(List<EventInfo> techEvents)
         {
-            foreach (var techEvent in techEvents)
+            List<EventInfo> sortedList = techEvents.OrderBy(o => o.City).ToList();
+            for (int i = 0; i < sortedList.Count; i++)
             {
-                db.EventInfo.Add(techEvent);
+                db.EventInfo.Add(sortedList[i]);
             }
             db.SaveChanges();
         }
 
-        // GET: EventInfoes/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            EventInfo eventInfo = db.EventInfo.Find(id);
-            if (eventInfo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(eventInfo);
-        }
-
-        // GET: EventInfoes/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: EventInfoes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EventID,Summary,Description,EventDate,HourOfEvent,MinOfEvent,WeatherDescription")] EventInfo eventInfo)
-        {
-            if (ModelState.IsValid)
-            {
-                db.EventInfo.Add(eventInfo);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(eventInfo);
-        }
-
-        // GET: EventInfoes/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            EventInfo eventInfo = db.EventInfo.Find(id);
-            if (eventInfo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(eventInfo);
-        }
-
-        // POST: EventInfoes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EventID,Summary,Description,EventDate,HourOfEvent,MinOfEvent,WeatherDescription")] EventInfo eventInfo)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(eventInfo).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(eventInfo);
-        }
-
-        // GET: EventInfoes/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            EventInfo eventInfo = db.EventInfo.Find(id);
-            if (eventInfo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(eventInfo);
-        }
-
-        // POST: EventInfoes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            EventInfo eventInfo = db.EventInfo.Find(id);
-            db.EventInfo.Remove(eventInfo);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        public void DeleteRecords()
+        private void DeleteRecords()
         {
             foreach (var record in db.EventInfo)
             {
                 db.EventInfo.Remove(record);
             }
             db.SaveChanges();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
