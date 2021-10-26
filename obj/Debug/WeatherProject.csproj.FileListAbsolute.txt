@@ -62,3 +62,4 @@ C:\Users\User\source\repos\WeatherProject\bin\HtmlAgilityPack.dll
 C:\Users\User\source\repos\WeatherProject\bin\HtmlAgilityPack.pdb
 C:\Users\User\source\repos\WeatherProject\bin\HtmlAgilityPack.xml
 C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.Migrations.Changestotheinstancevariables.resources
+C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.csproj.AssemblyReference.cache

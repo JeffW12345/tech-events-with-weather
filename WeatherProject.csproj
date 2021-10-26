@@ -185,8 +185,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\EventInfoes\Create.cshtml" />
-    <Content Include="Views\EventInfoes\Delete.cshtml" />
     <Content Include="Views\EventInfoes\Details.cshtml" />
     <Content Include="Views\EventInfoes\Edit.cshtml" />
     <Content Include="Views\EventInfoes\Index.cshtml" />

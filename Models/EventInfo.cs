@@ -144,12 +144,24 @@ namespace WeatherProject.Models
         {
             foreach(var techEvent in eventsWithoutWeather)
             {
-                if(String.IsNullOrEmpty(techEvent.Latitude) || String.IsNullOrEmpty(techEvent.Longtitude))
+                if (techEvent.IsRemote)
                 {
-                    techEvent.WeatherDescription = "Not available";
+                    techEvent.WeatherDescription = "N/A - Virtual event";
                     continue;
                 }
                 string url = "http://api.openweathermap.org/data/2.5/forecast?lat=" + techEvent.Latitude + "&lon=" + techEvent.Longtitude + "&appid=e713f513019bae6baa220783378d7945";
+                if (String.IsNullOrEmpty(techEvent.Latitude) || String.IsNullOrEmpty(techEvent.Longtitude))
+                {
+                    if (String.IsNullOrEmpty(techEvent.City))
+                    {
+                        techEvent.WeatherDescription = "Not available";
+                        continue;
+                    }
+                    else
+                    {
+                        url = GetUrlForCity(techEvent.City);
+                    }
+                }
                 string json = new System.Net.WebClient().DownloadString(url);
                 var dataPoints = JsonConvert.DeserializeObject<Rootobject>(json);
                 foreach(var snapshot in dataPoints.list)
@@ -160,16 +172,22 @@ namespace WeatherProject.Models
                     int hour = Convert.ToInt32(snapshot.dt_txt.Substring(11, 2));
                     int min = Convert.ToInt32(snapshot.dt_txt.Substring(14, 2));
                     DateTime timeOfWeather = new DateTime(year, month, day, hour, min, 0);
-                    if(timeOfWeather < techEvent.EventDate)
+                    if (DateTime.Compare(timeOfWeather, techEvent.EventDate) < 0)
                     {
                         continue;
                     }
                     else
                     {
-                        techEvent.WeatherDescription = snapshot.weather[0].main + ": " + snapshot.weather[0].description;
+                        techEvent.WeatherDescription = snapshot.weather[0].description;
+                        break;
                     }
                 }
             }
+        }
+
+        private static string GetUrlForCity(string city)
+        {
+            return "http://api.openweathermap.org/data/2.5/forecast?q=" + city + ",GB&appid=e713f513019bae6baa220783378d7945";
         }
 
         private static List<EventInfo> GetEventsWithoutWeather()
