@@ -189,11 +189,16 @@ namespace WeatherProject.Models
             string url = "https://opentechcalendar.co.uk/api1/events.json";
             string json = new System.Net.WebClient().DownloadString(url);
             var dataPoints = JsonConvert.DeserializeObject<Root>(json);
-            dataPoints.data.OrderBy(a => a.areas[0].title);
+            dataPoints.data = RemoveObjectsWithoutCity(dataPoints.data);
+            var listOfObjs = dataPoints.data.OrderBy(a => a.areas[0].title).ToList();
             List<EventInfo> eventsWithoutWeather = new List<EventInfo>();
-            foreach (var entry in dataPoints.data)
+            foreach (var entry in listOfObjs)
             {
-                if (entry.cancelled || entry.country.title != "United Kingdom")
+                if (entry.cancelled || entry.country.title != "United Kingdom" || entry.deleted)
+                {
+                    continue;
+                }
+                if(entry.areas is null || String.IsNullOrEmpty(entry.areas[0].title))
                 {
                     continue;
                 }
@@ -228,8 +233,27 @@ namespace WeatherProject.Models
                 }
                 eventsWithoutWeather.Add(obj);
             }
+            eventsWithoutWeather.OrderBy(a => a.City);
             AssignIDs(eventsWithoutWeather);
             return eventsWithoutWeather;
+        }
+
+        private static Datum[] RemoveObjectsWithoutCity(Datum[] toCheck)
+        {
+            var toCheckAsList = toCheck.ToList();
+            int index = 0;
+            foreach (var entry in toCheck)
+            {
+                if (entry.areas == null || entry.areas.Length == 0)
+                {
+                    toCheckAsList.RemoveAt(index);
+                }
+                else
+                {
+                    index++;
+                }
+            }
+            return toCheckAsList.ToArray();
         }
 
         private static void AssignIDs(List<EventInfo> eventsWithoutWeather)
