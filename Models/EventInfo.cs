@@ -14,34 +14,21 @@ namespace WeatherProject.Models
     {
         [Key]
         public int EventID { get; set; }
-        [Display(Name = "Summary")]
-        public string Summary { get; set; }
-        [Display(Name = "Description")]
-        public string Description { get; set; }
-        [Display(Name = "Event date")]
-
+        [Display(Name = "Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime EventDate { get; set; }
-
-        public int HourOfEvent { get; set; }
-        public int MinOfEvent { get; set; }
-
-        public string WeatherDescription { get; set; }
-
-        public string SlugForURL { get; set; }
-
-        public string URL { get; set; }
-        public string Time { get; set; }
-
-        public string City { get; set; }
-
-        public bool IsRemote { get; set; }
-
-        public string Latitude { get; set; }
-
-        public string Longtitude { get; set; }
-
+        [Display(Name = "Time")]
         public string TimeOfEvent { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
+        [Display(Name = "Summary")]
+        public string Summary { get; set; }
+        [Display(Name = "Link")]
+        public string URL { get; set; }
+        public string WeatherDescription { get; set; }
+        public bool IsRemote { get; set; }
+        public string Latitude { get; set; }
+        public string Longtitude { get; set; }
     }
     public class EventInfoContext : DbContext
     {
@@ -149,6 +136,7 @@ namespace WeatherProject.Models
         {
             List<EventInfo> techEvents = GetEventsWithoutWeather();
             AddWeather(techEvents);
+            techEvents.OrderBy(a => a.City).ThenBy(a => a.EventDate);
             return techEvents;
         }
 
@@ -156,7 +144,12 @@ namespace WeatherProject.Models
         {
             foreach(var techEvent in eventsWithoutWeather)
             {
-                string url = "api.openweathermap.org/data/2.5/forecast?lat=" + techEvent.Latitude + "&lon=" + techEvent.Longtitude + "&appid=e713f513019bae6baa220783378d7945";
+                if(String.IsNullOrEmpty(techEvent.Latitude) || String.IsNullOrEmpty(techEvent.Longtitude))
+                {
+                    techEvent.WeatherDescription = "Not available";
+                    continue;
+                }
+                string url = "http://api.openweathermap.org/data/2.5/forecast?lat=" + techEvent.Latitude + "&lon=" + techEvent.Longtitude + "&appid=e713f513019bae6baa220783378d7945";
                 string json = new System.Net.WebClient().DownloadString(url);
                 var dataPoints = JsonConvert.DeserializeObject<Rootobject>(json);
                 foreach(var snapshot in dataPoints.list)
@@ -205,11 +198,26 @@ namespace WeatherProject.Models
                 obj.URL = "https://opentechcalendar.co.uk/event/" + entry.slugforurl;
                 obj.City = entry.areas[0].title;
                 obj.IsRemote = entry.is_virtual;
-                obj.Latitude = entry.venue.lat;
-                obj.Longtitude = entry.venue.lng;
                 obj.TimeOfEvent = entry.start.hourlocal + ":" + entry.start.minutelocal;
+                if(entry.venue is null || entry.venue.lat is null)
+                {
+                    obj.Latitude = "";
+                }
+                else
+                {
+                    obj.Latitude = entry.venue.lat;
+                }
+                if (entry.venue is null || entry.venue.lng is null)
+                {
+                    obj.Longtitude = "";
+                }
+                else
+                {
+                    obj.Longtitude = entry.venue.lng;
+                }
                 eventsWithoutWeather.Add(obj);
             }
+
             return eventsWithoutWeather;
         }
     }
@@ -259,7 +267,7 @@ namespace WeatherProject.Models
             public float sea_level { get; set; }
             public float grnd_level { get; set; }
             public int humidity { get; set; }
-            public int temp_kf { get; set; }
+            public string temp_kf { get; set; }
         }
 
         public class Clouds

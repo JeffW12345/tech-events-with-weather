@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<WeatherProject.Models.EventInfo>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "View";
 }
 
-<h2>Index</h2>
+<h2>Tech events in the UK over the next 5 days</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,22 +12,31 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Summary)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.EventDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.HourOfEvent)
+            @Html.DisplayNameFor(model => model.TimeOfEvent)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MinOfEvent)
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Summary)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.URL)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.WeatherDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsRemote)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Latitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Longtitude)
         </th>
         <th></th>
     </tr>
@@ -35,22 +44,31 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Summary)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.EventDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.HourOfEvent)
+            @Html.DisplayFor(modelItem => item.TimeOfEvent)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.MinOfEvent)
+            @Html.DisplayFor(modelItem => item.City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Summary)
+        </td>
+        <td>
+            <a href=@item.URL>@item.URL </a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.WeatherDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsRemote)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Latitude)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Longtitude)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.EventID }) |

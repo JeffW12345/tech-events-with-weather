@@ -26,6 +26,10 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -137,6 +141,10 @@
     <Compile Include="Migrations\202110252039055_new-field.Designer.cs">
       <DependentUpon>202110252039055_new-field.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110261459026_Changes to the instance variables.cs" />
+    <Compile Include="Migrations\202110261459026_Changes to the instance variables.Designer.cs">
+      <DependentUpon>202110261459026_Changes to the instance variables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\EventInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -202,6 +210,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202110252039055_new-field.resx">
       <DependentUpon>202110252039055_new-field.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110261459026_Changes to the instance variables.resx">
+      <DependentUpon>202110261459026_Changes to the instance variables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
