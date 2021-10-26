@@ -142,7 +142,8 @@ namespace WeatherProject.Models
                     techEvent.WeatherDescription = "N/A - Virtual event";
                     continue;
                 }
-                string url = "http://api.openweathermap.org/data/2.5/forecast?lat=" + techEvent.Latitude + "&lon=" + techEvent.Longtitude + "&appid=e713f513019bae6baa220783378d7945";
+                string url = GetURLForLongAndLat(techEvent.Longtitude, techEvent.Latitude);
+                // Base forecast on latitude and longitude rather than city where possible
                 if (String.IsNullOrEmpty(techEvent.Latitude) || String.IsNullOrEmpty(techEvent.Longtitude))
                 {
                     if (String.IsNullOrEmpty(techEvent.City))
@@ -179,6 +180,11 @@ namespace WeatherProject.Models
             }
         }
 
+        private static string GetURLForLongAndLat(string longtitude, string latitude)
+        {
+            return "http://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longtitude + "&appid=e713f513019bae6baa220783378d7945";
+        }
+
         private static string GetUrlForCity(string city)
         {
             return "http://api.openweathermap.org/data/2.5/forecast?q=" + city + ",GB&appid=e713f513019bae6baa220783378d7945";
@@ -198,10 +204,6 @@ namespace WeatherProject.Models
                 {
                     continue;
                 }
-                if(entry.areas is null || String.IsNullOrEmpty(entry.areas[0].title))
-                {
-                    continue;
-                }
                 EventInfo obj = new EventInfo();
                 obj.EventDate = new DateTime(Convert.ToInt32(entry.start.yearlocal), Convert.ToInt32(entry.start.monthlocal), Convert.ToInt32(entry.start.daylocal),
                     Convert.ToInt32(entry.start.hourlocal), Convert.ToInt32(entry.start.minutelocal), 0);
@@ -215,7 +217,12 @@ namespace WeatherProject.Models
                 obj.City = entry.areas[0].title;
                 obj.IsRemote = entry.is_virtual;
                 obj.TimeOfEvent = entry.start.hourlocal + ":" + entry.start.minutelocal;
-                if(entry.venue is null || entry.venue.lat is null)
+                if(Convert.ToInt32(entry.start.hourlocal) <= 12)
+                {
+                    obj.TimeOfEvent += " am";
+                }
+                // To avoid null exception errors if longtitude and/or latitude are missing.
+                if(entry.venue is null || String.IsNullOrEmpty(entry.venue.lat))
                 {
                     obj.Latitude = "";
                 }
@@ -223,7 +230,7 @@ namespace WeatherProject.Models
                 {
                     obj.Latitude = entry.venue.lat;
                 }
-                if (entry.venue is null || entry.venue.lng is null)
+                if (entry.venue is null || String.IsNullOrEmpty(entry.venue.lng))
                 {
                     obj.Longtitude = "";
                 }
@@ -233,8 +240,6 @@ namespace WeatherProject.Models
                 }
                 eventsWithoutWeather.Add(obj);
             }
-            eventsWithoutWeather.OrderBy(a => a.City);
-            AssignIDs(eventsWithoutWeather);
             return eventsWithoutWeather;
         }
 
@@ -254,16 +259,6 @@ namespace WeatherProject.Models
                 }
             }
             return toCheckAsList.ToArray();
-        }
-
-        private static void AssignIDs(List<EventInfo> eventsWithoutWeather)
-        {
-            int eventNum = 0;
-            eventsWithoutWeather.OrderBy(a => a.City);
-            foreach(var entry in eventsWithoutWeather)
-            {
-                entry.EventID = eventNum++;
-            }
         }
     }
 
