@@ -10,7 +10,7 @@ using WeatherProject.Models;
 
 namespace WeatherProject.Controllers
 {
-    public class EventInfoesController : Controller
+    public class HomeController : Controller
     {
         private EventInfoContext db = new EventInfoContext();
 
