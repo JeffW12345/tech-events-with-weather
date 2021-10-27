@@ -18,9 +18,8 @@ namespace WeatherProject.Controllers
         public ActionResult Index()
         {
             DeleteRecords(); // Deletes all records in the database
-            List<EventInfo> techEvents = CreateObjects.GetTechEvents();
+            List<EventInfo> techEvents = CreateObjects.GetTechEvents(); // Returns objects relating to the tech events (including weather forecasts)
             AddRecords(techEvents); // Populates the database with the newly created objects.
-            db.EventInfo.OrderBy(a => a.City);
             return View(db.EventInfo.ToList());
         }
 

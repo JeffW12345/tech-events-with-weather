@@ -24,38 +24,45 @@ namespace WeatherProject.Models
                     techEvent.WeatherDescription = "N/A - Virtual event";
                     continue;
                 }
+                if(techEvent.City == "United Kingdom")
+                {
+                    techEvent.WeatherDescription = "City unknown, so no forecast";
+                    continue;
+                }
                 string url = GetURLForLongAndLat(techEvent.Longtitude, techEvent.Latitude);
                 // Base forecast on latitude and longitude rather than city where possible
                 if (String.IsNullOrEmpty(techEvent.Latitude) || String.IsNullOrEmpty(techEvent.Longtitude))
                 {
-                    if (String.IsNullOrEmpty(techEvent.City))
-                    {
-                        techEvent.WeatherDescription = "Not available";
-                        continue;
-                    }
-                    else
-                    {
-                        url = GetUrlForCity(techEvent.City);
-                    }
+                    url = GetUrlForCity(techEvent.City);
                 }
-                string json = new System.Net.WebClient().DownloadString(url);
-                var dataPoints = JsonConvert.DeserializeObject<Rootobject>(json);
-                foreach (var snapshot in dataPoints.list)
+                string json = new System.Net.WebClient().DownloadString(url); // Gets JSON
+                var objs = JsonConvert.DeserializeObject<Rootobject>(json); // Deserialises JSON
+                // If no forecast returned.
+                if(objs.cod == "404")
                 {
-                    int year = Convert.ToInt32(snapshot.dt_txt.Substring(0, 4));
-                    int month = Convert.ToInt32(snapshot.dt_txt.Substring(5, 2));
-                    int day = Convert.ToInt32(snapshot.dt_txt.Substring(8, 2));
-                    int hour = Convert.ToInt32(snapshot.dt_txt.Substring(11, 2));
-                    int min = Convert.ToInt32(snapshot.dt_txt.Substring(14, 2));
+                    techEvent.WeatherDescription = "No forecast available";
+                    continue;
+                }
+                foreach (var weather_obj in objs.list)
+                {
+                    // Get time and date of forecast in local time (events are listed in local time).
+                    int year = Convert.ToInt32(weather_obj.dt_txt.Substring(0, 4));
+                    int month = Convert.ToInt32(weather_obj.dt_txt.Substring(5, 2));
+                    int day = Convert.ToInt32(weather_obj.dt_txt.Substring(8, 2));
+                    int hour = Convert.ToInt32(weather_obj.dt_txt.Substring(11, 2));
+                    int min = Convert.ToInt32(weather_obj.dt_txt.Substring(14, 2));
                     DateTime timeOfWeather = new DateTime(year, month, day, hour, min, 0);
-                    if (DateTime.Compare(timeOfWeather, techEvent.EventDate) < 0)
+                    DateTime tellCompilerWeatherIsUTC = DateTime.SpecifyKind(timeOfWeather, DateTimeKind.Utc);
+                    DateTime weatherLocalTime = tellCompilerWeatherIsUTC.ToLocalTime();
+                    // Weather forecasts are listed from earliest to latest.
+                    // The first weather forecast after the event is used (there are forecasts every 3 hours).
+                    if (DateTime.Compare(weatherLocalTime, techEvent.EventDate) < 0)
                     {
                         continue;
                     }
                     else
                     {
-                        string weatherCapitalised = char.ToUpper(snapshot.weather[0].description[0]) + snapshot.weather[0].description.Substring(1);
-                        techEvent.WeatherDescription = weatherCapitalised;
+                        techEvent.WeatherDescription = char.ToUpper(weather_obj.weather[0].description[0]) + weather_obj.weather[0].description.Substring(1); // Start of forecast capitalised.
                         break;
                     }
                 }
@@ -75,10 +82,10 @@ namespace WeatherProject.Models
         private static List<EventInfo> GetEventsWithoutWeather()
         {
             string url = "https://opentechcalendar.co.uk/api1/events.json";
-            string json = new System.Net.WebClient().DownloadString(url);
-            var dataPoints = JsonConvert.DeserializeObject<Root>(json);
-            dataPoints.data = RemoveObjectsWithoutCity(dataPoints.data);
-            var listOfObjs = dataPoints.data.OrderBy(a => a.areas[0].title).ToList();
+            string json = new System.Net.WebClient().DownloadString(url); // Gets JSON
+            var objs = JsonConvert.DeserializeObject<Root>(json); // Deseralises JSON and creates objects
+            objs.data = ProcessEntriesWithoutCity(objs.data);
+            var listOfObjs = objs.data.OrderBy(a => a.areas[0].title).ToList();
             List<EventInfo> eventsWithoutWeather = new List<EventInfo>();
             foreach (var entry in listOfObjs)
             {
@@ -89,6 +96,7 @@ namespace WeatherProject.Models
                 EventInfo obj = new EventInfo();
                 obj.EventDate = new DateTime(Convert.ToInt32(entry.start.yearlocal), Convert.ToInt32(entry.start.monthlocal), Convert.ToInt32(entry.start.daylocal),
                     Convert.ToInt32(entry.start.hourlocal), Convert.ToInt32(entry.start.minutelocal), 0);
+                // Removes from consideration anything more than 5 days from now.
                 if (obj.EventDate > DateTime.Now.AddDays(5))
                 {
                     continue;
@@ -99,7 +107,7 @@ namespace WeatherProject.Models
                 obj.City = entry.areas[0].title;
                 obj.IsRemote = entry.is_virtual;
                 obj.TimeOfEvent = entry.start.hourlocal + ":" + entry.start.minutelocal;
-                if (Convert.ToInt32(entry.start.hourlocal) <= 12)
+                if (Convert.ToInt32(entry.start.hourlocal) < 12)
                 {
                     obj.TimeOfEvent += " am";
                 }
@@ -125,22 +133,26 @@ namespace WeatherProject.Models
             return eventsWithoutWeather;
         }
 
-        private static Datum[] RemoveObjectsWithoutCity(Datum[] toCheck)
+        private static Datum[] ProcessEntriesWithoutCity(Datum[] toCheck)
         {
-            var toCheckAsList = toCheck.ToList();
-            int index = 0;
             foreach (var entry in toCheck)
             {
-                if (entry.areas == null || entry.areas.Length == 0)
+                // If areas[] array is null
+                if (entry.areas == null)
                 {
-                    toCheckAsList.RemoveAt(index);
+                    Area area = new Area();
+                    area.title = "United Kingdom";
+                    Area [] areas = { area};
+                    entry.areas = areas;
+                    continue;
                 }
-                else
+                // If no city data in areas[] array
+                if (String.IsNullOrEmpty(entry.areas[0].title))
                 {
-                    index++;
+                    entry.areas[0].title = "United Kingdom";
                 }
             }
-            return toCheckAsList.ToArray();
+            return toCheck;
         }
     }
 }
