@@ -62,4 +62,4 @@ C:\Users\User\source\repos\WeatherProject\obj\Debug\TechEventWithWeatherProject.
 C:\Users\User\source\repos\WeatherProject\obj\Debug\TechEventWithWeatherProject.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.dll
 C:\Users\User\source\repos\WeatherProject\obj\Debug\WeatherProject.pdb
-C:\Users\User\source\repos\WeatherProject\obj\Debug\TechEventWithWeatherProject.csproj.CopyComplete
+C:\Users\User\source\repos\WeatherProject\obj\Debug\TechEventWithWeatherProject.csproj.AssemblyReference.cache
