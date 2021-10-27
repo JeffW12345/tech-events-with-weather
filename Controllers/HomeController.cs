@@ -26,10 +26,9 @@ namespace WeatherProject.Controllers
 
         private void AddRecords(List<EventInfo> techEvents)
         {
-            List<EventInfo> sortedList = techEvents.OrderBy(o => o.City).ToList();
-            for (int i = 0; i < sortedList.Count; i++)
+            for (int i = 0; i < techEvents.Count; i++)
             {
-                db.EventInfo.Add(sortedList[i]);
+                db.EventInfo.Add(techEvents[i]);
             }
             db.SaveChanges();
         }

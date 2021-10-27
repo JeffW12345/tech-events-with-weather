@@ -146,7 +146,27 @@
       <DependentUpon>202110261459026_Changes to the instance variables.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\CreateObjects.cs" />
     <Compile Include="Models\EventInfo.cs" />
+    <Compile Include="Models\EventInfoContext.cs" />
+    <Compile Include="Models\Imported Tech Event Data Models\Area.cs" />
+    <Compile Include="Models\Imported Tech Event Data Models\Country.cs" />
+    <Compile Include="Models\Imported Tech Event Data Models\Custom_Fields.cs" />
+    <Compile Include="Models\Imported Tech Event Data Models\Datum.cs" />
+    <Compile Include="Models\Imported Tech Event Data Models\End.cs" />
+    <Compile Include="Models\Imported Tech Event Data Models\Root.cs" />
+    <Compile Include="Models\Imported Tech Event Data Models\Start.cs" />
+    <Compile Include="Models\Imported Tech Event Data Models\Venue.cs" />
+    <Compile Include="Models\Weather Models\City.cs" />
+    <Compile Include="Models\Weather Models\Clouds.cs" />
+    <Compile Include="Models\Weather Models\Coord.cs" />
+    <Compile Include="Models\Weather Models\List.cs" />
+    <Compile Include="Models\Weather Models\Main.cs" />
+    <Compile Include="Models\Weather Models\Rain.cs" />
+    <Compile Include="Models\Weather Models\RootObject.cs" />
+    <Compile Include="Models\Weather Models\Sys.cs" />
+    <Compile Include="Models\Weather Models\Weather.cs" />
+    <Compile Include="Models\Weather Models\Wind.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
