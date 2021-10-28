@@ -7,4 +7,4 @@ INSTRUCTIONS:
 
 Click on TechEventWithWeatherProject.sln and open with Visual Studio, then press F10 to generate a browser.
 
-![TechEventAppScreenshot](https://user-images.githubusercontent.com/59927061/139070204-76297f87-0445-4393-b629-882390bd4d33.PNG)
+![TechEventAppScreenshot](https://user-images.githubusercontent.com/59927061/139215918-c40e1e45-5075-4fe4-94a5-514f1f5168aa.PNG)
