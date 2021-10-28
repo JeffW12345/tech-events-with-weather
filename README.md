@@ -6,5 +6,6 @@ Uses the APIs OpenTechCalendar (https://opentechcalendar.co.uk/) and from OpenWe
 INSTRUCTIONS:
 
 Click on TechEventWithWeatherProject.sln and open with Visual Studio, then press F10 to generate a browser.
- 
-![TechEventAppScreenshot](https://user-images.githubusercontent.com/59927061/139215918-c40e1e45-5075-4fe4-94a5-514f1f5168aa.PNG)
+
+![TechEventAppScreenshot](https://user-images.githubusercontent.com/59927061/139216475-eca89aa3-ea67-451b-a2df-acb4306534eb.PNG)
+
