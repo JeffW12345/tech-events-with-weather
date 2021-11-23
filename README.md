@@ -1,7 +1,7 @@
 # tech-events-with-weather
 Provides a list of tech events around the UK over the next five days, along with the weather forecast
 
-Uses the APIs OpenTechCalendar (https://opentechcalendar.co.uk/) and from OpenWeatherMap API (https://openweathermap.org/api) to get the tech event and weather data respectively. 
+Uses the OpenTechCalendar (https://opentechcalendar.co.uk/) and OpenWeatherMap APIs (https://openweathermap.org/api) to get the tech event and weather data respectively. 
 
 INSTRUCTIONS:
 
